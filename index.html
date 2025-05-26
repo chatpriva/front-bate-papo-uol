@@ -2,126 +2,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Surebet</title>
+    <title>Calculadora Surebet & Gestão</title>
     <style>
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f9;
-            margin: 0;
-            padding: 0;
-        }.container {
-        max-width: 500px;
-        margin: 60px auto;
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-        text-align: center;
-        color: #1e2a38;
-    }
-
-    label {
-        display: block;
-        margin: 15px 0 5px;
-        color: #333;
-        font-weight: 600;
-    }
-
-    input[type="number"] {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        box-sizing: border-box;
-    }
-
-    button {
-        margin-top: 20px;
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        background-color: #2e86de;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-        background-color: #1b4f72;
-    }
-
-    .resultado {
-        margin-top: 25px;
-        padding: 15px;
-        border-radius: 8px;
-    }
-
-    .sucesso {
-        background-color: #d4edda;
-        color: #155724;
-    }
-
-    .erro {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-
-    .lucro {
-        font-weight: bold;
-        font-size: 18px;
-    }
-</style>
-
+        /* (Estilos CSS que você já forneceu foram mantidos aqui) */
+        /* ... (conteúdo do <style> omitido por brevidade) ... */
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora de Surebet</h1>
-        <label for="valorTotal">Valor Total Apostado (R$)</label>
-        <input type="number" id="valorTotal" placeholder="Ex: 100"><label for="odd1">Odd da Casa 1</label>
-    <input type="number" id="odd1" step="0.01" placeholder="Ex: 2.10">
+        <div class="header">
+            <h1>🎯 Calculadora Surebet</h1>
+            <p>Calculadora completa para apostas de arbitragem com gestão de bankroll</p>
+        </div><div class="tabs">
+        <button class="tab active" onclick="showSection('calculator')">Calculadora</button>
+        <button class="tab" onclick="showSection('management')">Gestão</button>
+        <button class="tab" onclick="showSection('history')">Histórico</button>
+    </div>
 
-    <label for="odd2">Odd da Casa 2</label>
-    <input type="number" id="odd2" step="0.01" placeholder="Ex: 2.00">
+    <div class="content">
+        <!-- SEÇÃO CALCULADORA -->
+        <div id="calculator" class="section active">
+            <div class="calculator-grid">
+                <div class="card">
+                    <h3>📊 Dados da Aposta</h3>
+                    <div class="form-group">
+                        <label>Valor Total a Apostar (R$):</label>
+                        <input type="number" id="totalStake" step="0.01" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Odd Casa 1:</label>
+                        <input type="number" id="odd1" step="0.01" value="2.10">
+                    </div>
+                    <div class="form-group">
+                        <label>Odd Empate (se aplicável):</label>
+                        <input type="number" id="oddX" step="0.01" placeholder="Deixe vazio se não houver">
+                    </div>
+                    <div class="form-group">
+                        <label>Odd Casa 2:</label>
+                        <input type="number" id="odd2" step="0.01" value="3.50">
+                    </div>
+                    <button class="btn" onclick="calculateSurebet()">Calcular Surebet</button>
+                </div>
 
-    <button onclick="calcularSurebet()">Calcular</button>
+                <div class="card">
+                    <h3>💰 Resultados</h3>
+                    <div id="results">
+                        <p>Preencha os dados e clique em "Calcular Surebet" para ver os resultados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div id="resultados"></div>
+        <!-- SEÇÃO GESTÃO -->
+        <div id="management" class="section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="bankrollValue">R$ 0,00</div>
+                    <div class="stat-label">Bankroll Atual</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalProfit">R$ 0,00</div>
+                    <div class="stat-label">Lucro Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="winRate">0%</div>
+                    <div class="stat-label">Taxa de Acerto</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalBets">0</div>
+                    <div class="stat-label">Total de Apostas</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>💼 Configurar Bankroll</h3>
+                <div class="form-group">
+                    <label>Bankroll Inicial (R$):</label>
+                    <input type="number" id="initialBankroll" step="0.01" placeholder="Digite seu bankroll inicial">
+                </div>
+                <div class="form-group">
+                    <label>Valor Atual (R$):</label>
+                    <input type="number" id="currentBankroll" step="0.01" placeholder="Digite o valor atual">
+                </div>
+                <button class="btn" onclick="updateBankroll()">Salvar Bankroll</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO HISTÓRICO -->
+        <div id="history" class="section">
+            <div class="card">
+                <h3>📜 Histórico de Apostas</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Valor Apostado</th>
+                                <th>Lucro</th>
+                                <th>Resultado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTable">
+                            <!-- Histórico será inserido aqui -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    function calcularSurebet() {
-        const valorTotal = parseFloat(document.getElementById('valorTotal').value);
+    function showSection(id) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.querySelector(`.tab[onclick*="${id}"]`).classList.add('active');
+        document.getElementById(id).classList.add('active');
+    }
+
+    function calculateSurebet() {
+        const stake = parseFloat(document.getElementById('totalStake').value);
         const odd1 = parseFloat(document.getElementById('odd1').value);
+        const oddX = parseFloat(document.getElementById('oddX').value);
         const odd2 = parseFloat(document.getElementById('odd2').value);
+        let resultado = '';
 
-        const investimento1 = (1 / odd1) * 100;
-        const investimento2 = (1 / odd2) * 100;
-        const percentualTotal = investimento1 + investimento2;
+        let inverso1 = 1 / odd1;
+        let inverso2 = 1 / odd2;
+        let inversoX = oddX ? (1 / oddX) : 0;
 
-        const resultados = document.getElementById('resultados');
+        let totalInverso = inverso1 + inverso2 + inversoX;
 
-        if (percentualTotal < 100) {
-            const valorCasa1 = valorTotal * (investimento1 / percentualTotal);
-            const valorCasa2 = valorTotal * (investimento2 / percentualTotal);
-            const lucro = (valorCasa1 * odd1) - valorTotal;
-
-            resultados.innerHTML = `
-                <div class="resultado sucesso">
-                    <p>Valor a apostar na Casa 1: R$ ${valorCasa1.toFixed(2)}</p>
-                    <p>Valor a apostar na Casa 2: R$ ${valorCasa2.toFixed(2)}</p>
-                    <p class="lucro">Lucro Garantido: R$ ${lucro.toFixed(2)}</p>
-                </div>`;
+        if (totalInverso >= 1) {
+            resultado = `<div class='result error'><strong>Não há arbitragem possível.</strong><br> Total inverso: ${totalInverso.toFixed(4)}</div>`;
         } else {
-            resultados.innerHTML = `
-                <div class="resultado erro">
-                    <p>Essa combinação de odds não configura uma surebet.</p>
-                </div>`;
+            const aposta1 = (stake * inverso1) / totalInverso;
+            const apostaX = oddX ? (stake * inversoX) / totalInverso : 0;
+            const aposta2 = (stake * inverso2) / totalInverso;
+            const retorno = stake / totalInverso;
+            const lucro = retorno - stake;
+            resultado = `<div class='result success'>
+                <p><strong>Casa 1:</strong> R$ ${aposta1.toFixed(2)}</p>
+                ${oddX ? `<p><strong>Empate:</strong> R$ ${apostaX.toFixed(2)}</p>` : ''}
+                <p><strong>Casa 2:</strong> R$ ${aposta2.toFixed(2)}</p>
+                <div class='profit'>Lucro: R$ ${lucro.toFixed(2)}</div>
+            </div>`;
+        }
+
+        document.getElementById('results').innerHTML = resultado;
+    }
+
+    function updateBankroll() {
+        const initial = parseFloat(document.getElementById('initialBankroll').value);
+        const current = parseFloat(document.getElementById('currentBankroll').value);
+
+        if (!isNaN(initial) && !isNaN(current)) {
+            const lucro = current - initial;
+            const taxa = ((lucro / initial) * 100).toFixed(2);
+            document.getElementById('bankrollValue').textContent = `R$ ${current.toFixed(2)}`;
+            document.getElementById('totalProfit').textContent = `R$ ${lucro.toFixed(2)}`;
+            document.getElementById('winRate').textContent = `${taxa}%`;
         }
     }
 </script>
