@@ -1,62 +1,130 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Central ChatPriva</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding: 20px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Surebet</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+        }.container {
+        max-width: 500px;
+        margin: 60px auto;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-      color: #58a6ff;
+        text-align: center;
+        color: #1e2a38;
     }
 
-    .btn {
-      display: block;
-      width: 250px;
-      padding: 15px;
-      margin: 15px auto;
-      font-size: 16px;
-      text-align: center;
-      text-decoration: none;
-      color: #ffffff;
-      background-color: #238636;
-      border: none;
-      border-radius: 10px;
-      transition: background-color 0.3s ease;
+    label {
+        display: block;
+        margin: 15px 0 5px;
+        color: #333;
+        font-weight: 600;
     }
 
-    .btn:hover {
-      background-color: #2ea043;
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
     }
 
-    footer {
-      position: absolute;
-      bottom: 10px;
-      font-size: 12px;
-      color: #555;
+    button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        background-color: #2e86de;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
-  </style>
+
+    button:hover {
+        background-color: #1b4f72;
+    }
+
+    .resultado {
+        margin-top: 25px;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .sucesso {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .erro {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .lucro {
+        font-weight: bold;
+        font-size: 18px;
+    }
+</style>
+
 </head>
 <body>
-  <h1>Central ChatPriva</h1>
+    <div class="container">
+        <h1>Calculadora de Surebet</h1>
+        <label for="valorTotal">Valor Total Apostado (R$)</label>
+        <input type="number" id="valorTotal" placeholder="Ex: 100"><label for="odd1">Odd da Casa 1</label>
+    <input type="number" id="odd1" step="0.01" placeholder="Ex: 2.10">
 
-  <a class="btn" href="https://chatpriva.github.io/Chatpriva/" target="_blank">Acessar Calculadora</a>
-  <a class="btn" href="https://chatpriva.github.io/chat/" target="_blank">Acessar Gestão</a>
+    <label for="odd2">Odd da Casa 2</label>
+    <input type="number" id="odd2" step="0.01" placeholder="Ex: 2.00">
 
-  <footer>By ChatPriva | Tema escuro</footer>
+    <button onclick="calcularSurebet()">Calcular</button>
+
+    <div id="resultados"></div>
+</div>
+
+<script>
+    function calcularSurebet() {
+        const valorTotal = parseFloat(document.getElementById('valorTotal').value);
+        const odd1 = parseFloat(document.getElementById('odd1').value);
+        const odd2 = parseFloat(document.getElementById('odd2').value);
+
+        const investimento1 = (1 / odd1) * 100;
+        const investimento2 = (1 / odd2) * 100;
+        const percentualTotal = investimento1 + investimento2;
+
+        const resultados = document.getElementById('resultados');
+
+        if (percentualTotal < 100) {
+            const valorCasa1 = valorTotal * (investimento1 / percentualTotal);
+            const valorCasa2 = valorTotal * (investimento2 / percentualTotal);
+            const lucro = (valorCasa1 * odd1) - valorTotal;
+
+            resultados.innerHTML = `
+                <div class="resultado sucesso">
+                    <p>Valor a apostar na Casa 1: R$ ${valorCasa1.toFixed(2)}</p>
+                    <p>Valor a apostar na Casa 2: R$ ${valorCasa2.toFixed(2)}</p>
+                    <p class="lucro">Lucro Garantido: R$ ${lucro.toFixed(2)}</p>
+                </div>`;
+        } else {
+            resultados.innerHTML = `
+                <div class="resultado erro">
+                    <p>Essa combinação de odds não configura uma surebet.</p>
+                </div>`;
+        }
+    }
+</script>
+
 </body>
 </html>
